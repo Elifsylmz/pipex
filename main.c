@@ -34,6 +34,30 @@ void   ft_file2(char *file2)
     close(outfile);
 }
 
+int find_path(char **argv, char **envp)
+{
+    char *cmd_path;
+    char *cmd1_path;
+    char *cmd2_path;
+    int i = 0;
+
+    while(envp[i])
+    {
+        if((ft_strncmp(envp[i], "PATH=", 5) == 0))  // aradığımız ' PATH= '   
+            break;
+        i++;
+    }
+    cmd_path = envp[i] + 5;
+    ft_split(cmd_path, ':');
+
+
+    char **cmd1_arg;
+    char **cmd2_arg;
+    
+    cmd1_arg = ft_split(argv[2], ' ');
+    cmd2_arg = ft_split(argv[3], ' ');
+}
+
 int idk(char **argv, char **envp)
 {
     int pipefd[2];
@@ -48,12 +72,11 @@ int idk(char **argv, char **envp)
         dup2(pipefd[1], STDOUT_FILENO); // pipe yazma ucu oluyor
         close(pipefd[0]);
         close(pipefd[1]);
-        execve();
+        execve(cmd1_path, cmd1_arg, envp);
+        // path alıcak
+        // split edip komutu ve komut argümanlarını vericek
     }
-    // cmd1 dosyadan okicak
-    // cmd1 çıktısı pipe'a gidicek
-    // pipe uçlarını kapatmamız gerekiyormuş
-    // execve için path bulmaca olucak
+
     pid2 = fork();
     if (pid2 == 0) // child 2
     {
@@ -63,12 +86,7 @@ int idk(char **argv, char **envp)
         close(pipefd[1]);
         execve();
     }
-    // cmd2 pipe'dan okicak
-    // cmd2 çıktısı dosyaya gidicek
-    // pipe uçları kapandı
 
-    //parent processlerle ilgilenmen gerekiyor
-    
 }
 
 
