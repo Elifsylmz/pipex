@@ -3,7 +3,7 @@ NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = pipex.c
+SRCS = pipex.c main.c files.c func.c
 OBJS = $(SRCS:.c=.o)
 
 MYLIBFT = ./libft
