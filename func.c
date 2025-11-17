@@ -48,13 +48,8 @@ char *find_cmd_path(char **paths, char *cmd)
 
 }
 
-
-int cmd_arg(char **argv, char **envp)
+void parse_cmds(char **argv, char **envp, char ***cmd1_arg, char ***cmd2_arg, char **cmd1_path, char **cmd2_path)
 {
-    char **cmd1_arg;
-    char **cmd2_arg;
-    char *cmd1_path;
-    char *cmd2_path;
     char **paths;
 
     paths = find_path(envp);
@@ -63,18 +58,22 @@ int cmd_arg(char **argv, char **envp)
         perror("PATH not found");
         exit(1);
     }
-    cmd1_arg = ft_split(argv[2], ' ');
-    cmd2_arg = ft_split(argv[3], ' ');
-    if (!cmd1_arg || !cmd2_arg)
+
+    *cmd1_arg = ft_split(argv[2], ' ');
+    *cmd2_arg = ft_split(argv[3], ' ');
+
+    if (!*cmd1_arg || !*cmd2_arg)
     {
-        perror("cmd-ft_split");
+        perror("cmd split");
         exit(1);
     }
-    cmd1_path = find_cmd_path(paths, cmd1_arg[0]);
-    cmd2_path = find_cmd_path(paths, cmd2_arg[0]);
+
+    *cmd1_path = find_cmd_path(paths, (*cmd1_arg)[0]);
+    *cmd2_path = find_cmd_path(paths, (*cmd2_arg)[0]);
+
     if (!cmd1_path || !cmd2_path)
     {
-        //command not found
+        perror("command not found");
         exit(1);
     }
 }
