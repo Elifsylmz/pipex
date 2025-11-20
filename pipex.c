@@ -1,6 +1,6 @@
 #include "pipex.h"
 
-int child1(char **argv, char **envp, int *pipefd, char *cmd1_path, char **cmd1_arg)
+void child1(char **argv, char **envp, int *pipefd, char *cmd1_path, char **cmd1_arg)
 {
     ft_file1(argv[1]);
     if (dup2(pipefd[1], STDOUT_FILENO) == -1)
@@ -15,7 +15,7 @@ int child1(char **argv, char **envp, int *pipefd, char *cmd1_path, char **cmd1_a
     exit(1);
 }
 
-int child2(char **argv, char **envp, int *pipefd, char *cmd2_path, char **cmd2_arg)
+void child2(char **argv, char **envp, int *pipefd, char *cmd2_path, char **cmd2_arg)
 {
     if((dup2(pipefd[0], STDIN_FILENO)) == -1)
     {
@@ -68,6 +68,8 @@ int	ft_pipex(char **argv, char **envp)
 	waitpid(pid2, NULL, 0);
     free(cmd1_path);
 	free(cmd2_path);
+    ft_free(cmd1_arg);
+    ft_free(cmd2_arg);
 	return (0);
 }
 
@@ -75,7 +77,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	if (argc != 5)
 	{
-		write(1, "./pipex file1 cmd1 cmd2 file2\n", 31);
+		write(2, "./pipex file1 cmd1 cmd2 file2\n", 31);
 		return (1);
 	}
 	return (ft_pipex(argv, envp));
