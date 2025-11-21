@@ -6,7 +6,7 @@
 /*   By: eyilmaz <eyilmaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 01:01:26 by eyilmaz           #+#    #+#             */
-/*   Updated: 2025/11/21 03:21:47 by eyilmaz          ###   ########.fr       */
+/*   Updated: 2025/11/21 05:22:37 by eyilmaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ char	*find_cmd_path(char **paths, char *cmd)
 	int		i;
 	char	*tmp;
 	char	*full_path;
-	int		flag;
-	
-	flag = 0;
+
 	if (!cmd || !paths)
 		return (NULL);
 	if (ft_strchr(cmd, '/') && access(cmd, X_OK) == 0)
@@ -55,7 +53,6 @@ char	*find_cmd_path(char **paths, char *cmd)
 		free(full_path);
 		i++;
 	}
-
 	return (NULL);
 }
 
@@ -69,6 +66,12 @@ void	parse_args(t_pipex *pipex)
 		free_parent(pipex);
 		msg_err("cmd split error");
 	}
-	pipex->cmd1_path = find_cmd_path(pipex->paths, pipex->cmd1_arg[0]);
-	pipex->cmd2_path = find_cmd_path(pipex->paths, pipex->cmd2_arg[0]);
+	if (pipex->cmd1_arg[0])
+		pipex->cmd1_path = find_cmd_path(pipex->paths, pipex->cmd1_arg[0]);
+	else
+		pipex->cmd1_path = NULL;
+	if (pipex->cmd2_arg[0])
+		pipex->cmd2_path = find_cmd_path(pipex->paths, pipex->cmd2_arg[0]);
+	else
+		pipex->cmd2_path = NULL;
 }

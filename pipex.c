@@ -6,7 +6,7 @@
 /*   By: eyilmaz <eyilmaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 01:01:16 by eyilmaz           #+#    #+#             */
-/*   Updated: 2025/11/21 04:57:48 by eyilmaz          ###   ########.fr       */
+/*   Updated: 2025/11/21 05:23:14 by eyilmaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static void	init_pipex(t_pipex *pipex, char **argv, char **envp)
 
 int	ft_pipex(t_pipex *pipex)
 {
+	int	status;
+
 	if (pipe(pipex->pipefd) == -1)
 		msg_err("pipe");
 	parse_args(pipex);
@@ -41,14 +43,17 @@ int	ft_pipex(t_pipex *pipex)
 	close(pipex->pipefd[0]);
 	close(pipex->pipefd[1]);
 	waitpid(pipex->pid1, NULL, 0);
-	waitpid(pipex->pid2, NULL, 0);
+	waitpid(pipex->pid2, &status, 0);
 	free_parent(pipex);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
+	int		ex_code;
 
 	if (argc != 5)
 	{
@@ -56,6 +61,6 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	init_pipex(&pipex, argv, envp);
-	ft_pipex(&pipex);
-	return (0);
+	ex_code = ft_pipex(&pipex);
+	return (ex_code);
 }

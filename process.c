@@ -6,7 +6,7 @@
 /*   By: eyilmaz <eyilmaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 01:01:23 by eyilmaz           #+#    #+#             */
-/*   Updated: 2025/11/21 03:17:35 by eyilmaz          ###   ########.fr       */
+/*   Updated: 2025/11/21 05:20:14 by eyilmaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ void	child1(t_pipex *pipex)
 	else
 	{
 		write(2, "pipex: command not found: ", 26);
-		write(2, pipex->cmd1_arg[0], ft_strlen(pipex->cmd1_arg[0]));
+		if (pipex->cmd1_arg && pipex->cmd1_arg[0])
+			write(2, pipex->cmd1_arg[0], ft_strlen(pipex->cmd1_arg[0]));
 		write(2, "\n", 1);
+		free_child(pipex);
 		exit(127);
 	}
 	free_child(pipex);
@@ -58,8 +60,10 @@ void	child2(t_pipex *pipex)
 	else
 	{
 		write(2, "pipex: command not found: ", 26);
-		write(2, pipex->cmd2_arg[0], ft_strlen(pipex->cmd2_arg[0]));
+		if (pipex->cmd2_arg && pipex->cmd2_arg[0])
+			write(2, pipex->cmd2_arg[0], ft_strlen(pipex->cmd2_arg[0]));
 		write(2, "\n", 1);
+		free_child(pipex);
 		exit(127);
 	}
 	free_child(pipex);
